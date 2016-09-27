@@ -1,7 +1,6 @@
 {
-  "name": "park",
-  "version": "0.0.0",
-  "license": "MIT",
+  "name": "park-ride",
+  "version": "1.0.0",
   "angular-cli": {},
   "scripts": {
     "start": "ng serve",

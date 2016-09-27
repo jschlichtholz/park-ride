@@ -43,7 +43,7 @@ export class GeoLocationService {
       return this.http.get(this.geolocationUrl)
         .toPromise()
         .then(response => response.json() as GeoLocation)
-        .then(geoLocation => geoLocation.loc.split(',').map(parseFloat))
+        .then(location => location.loc.split(',').map(parseFloat))
         .catch(function (error: any) {
           return Promise.reject(error.message || error);
         });

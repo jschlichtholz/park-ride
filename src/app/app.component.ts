@@ -63,7 +63,7 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   setSelectedSite(site: Site): void {
     // Unset site and fire change detection to notify components even when selecting the same site twice.
-    this.search = "";
+    this.search = '';
     this.selectedSite = null;
     this.changeDetectionRef.detectChanges();
     this.selectedSite = site;
