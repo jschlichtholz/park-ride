@@ -1,3 +1,41 @@
-<h1>
-  {{title}}
-</h1>
+<nav class="navbar navbar-fixed-top navbar-dark bg-themed">
+  <form class="form-inline pull-xs-left m-b-0">
+    <input type="search" placeholder="{{'search.placeholder' | l10n}}" class="form-control" [(ngModel)]="search"
+           [ngModelOptions]="{standalone: true}" autofocus/>
+  </form>
+  <a class="navbar-brand pull-xs-right" href="#"><b>{{'title' | l10n}}</b></a>
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2" [ngClass]="{ 'hidden-md-down': !search || search.length === 0 }">
+      <nav class="nav nav-pills nav-stacked">
+        <a *ngFor="let site of sites | filter:['parkraumName', 'parkraumBahnhofName']:search"
+           (click)="setSelectedSite(site)" class="nav-link" href="#">{{getName(site)}}</a>
+      </nav>
+    </div>
+
+    <div class="col-md-10">
+      <app-alert></app-alert>
+
+      <app-map
+        [longitude]="longitude"
+        [latitude]="latitude"
+        [markers]="markers"
+        (onSelect)="setSelectedSite($event)"
+      ></app-map>
+
+      <app-site *ngIf="selectedSite" [site]="selectedSite"></app-site>
+    </div>
+  </div>
+</div>
+
+<nav class="navbar navbar-fixed-bottom bg-themed">
+  <ul class="nav navbar-nav">
+    <li class="nav-item">{{'copyright' | l10n}}</li>
+    <li class="nav-item pull-xs-right" *ngFor="let language of languages" (click)="setLanguage(language.value)">
+            <span role=button [class.active]="isCurrentLanguage(language.value)"
+                  class="flag-icon flag-icon-{{language.icon}}"></span>
+    </li>
+  </ul>
+</nav>

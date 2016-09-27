@@ -1,0 +1,4 @@
+0,15,30,45 * * * * curl http://opendata.dbbahnpark.info/api/beta/occupancy > /usr/src/app/stats/data/`date --iso-8601=seconds`.json
+30         2 * * * cd /usr/src/app/stats && ./run.sh
+0          2 * * * find /usr/src/app/stats/data -type f -iname "*.json" -mtime +7 -delete -print
+

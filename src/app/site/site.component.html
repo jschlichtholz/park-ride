@@ -1,0 +1,220 @@
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">{{siteName}}</h4>
+      </div>
+      <div class="modal-body">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#common" role="tab">{{'tab.common' | l10n}}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#pricing" role="tab">{{'tab.pricing' | l10n}}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#payment" role="tab">{{'tab.payment' | l10n}}</a>
+          </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div class="tab-pane active" id="common" role="tabpanel">
+            <table class="table table-striped">
+              <tbody>
+              <tr>
+                <th scope="row">{{ 'row.state' | l10n }}</th>
+                <td>{{site.bundesland}}</td>
+              </tr>
+              <tr class="table-danger" *ngIf="site.parkraumIsAusserBetrieb">
+                <th scope="row">{{ 'row.outOfOrder' | l10n }}</th>
+                <td>{{getOutOfOrder(site)}}</td>
+              </tr>
+              <tr>
+                <th scope="row">{{ 'row.distance' | l10n }}</th>
+                <td>{{site.parkraumEntfernung}} m</td>
+              </tr>
+              <tr>
+                <th scope="row">{{ 'row.access' | l10n }}</th>
+                <td>{{getAccess(site)}}</td>
+              </tr>
+              <tr>
+                <th scope="row">{{ 'row.opening' | l10n }}</th>
+                <td>{{getOpeningHours(site)}}</td>
+              </tr>
+              <tr>
+                <th scope="row">{{ 'row.type' | l10n }}</th>
+                <td>{{site.parkraumParkTypName}}</td>
+              </tr>
+              <tr>
+                <th scope="row">{{ 'row.technology' | l10n }}</th>
+                <td>{{getTechnology(site)}}</td>
+              </tr>
+              <tr>
+                <th scope="row">{{ 'row.lots.total' | l10n }}</th>
+                <td>{{site.parkraumStellplaetze}}</td>
+              </tr>
+              <tr *ngIf="occupancy">
+                <th scope="row">{{ 'row.lots.free' | l10n }}</th>
+                <td><span [class]="getStyle()">{{occupancy?.allocation.text}}</span></td>
+              </tr>
+              </tbody>
+              <tfoot>
+              <tr>
+                <td colspan="2">{{ 'copyright.db' | l10n }}</td>
+              </tr>
+              </tfoot>
+            </table>
+          </div>
+
+          <div class="tab-pane" id="pricing" role="tabpanel">
+            <table class="table table-striped">
+              <tbody>
+              <tr *ngIf="site.tarifFreiparkzeit || site.tarifFreiparkzeit_en">
+                <th scope="row">{{ 'row.pricing.freeTime' | l10n }}</th>
+                <td>{{getFreeTime(site)}}</td>
+              </tr>
+              <tr *ngIf="site.tarif20Min">
+                <th scope="row">{{ 'row.pricing.20min' | l10n }}</th>
+                <td>{{site.tarif20Min}} &euro;</td>
+              </tr>
+              <tr *ngIf="site.tarif30Min">
+                <th scope="row">{{ 'row.pricing.30min' | l10n }}</th>
+                <td>{{site.tarif30Min}} &euro;</td>
+              </tr>
+              <tr *ngIf="site.tarif1Std">
+                <th scope="row">{{ 'row.pricing.1h' | l10n }}</th>
+                <td>{{site.tarif1Std}} &euro;</td>
+              </tr>
+              <tr *ngIf="site.tarif1Tag">
+                <th scope="row">{{ 'row.pricing.1d' | l10n }}</th>
+                <td>{{site.tarif1Tag}} &euro;</td>
+              </tr>
+              <tr *ngIf="site.tarif1TagRabattDB">
+                <th scope="row">{{ 'row.pricing.1dDiscounted' | l10n }}</th>
+                <td>{{site.tarif1TagRabattDB}} &euro;</td>
+              </tr>
+              <tr *ngIf="site.tarif1Woche">
+                <th scope="row">{{ 'row.pricing.1w' | l10n }}</th>
+                <td>{{site.tarif1Woche}} &euro;</td>
+              </tr>
+              <tr *ngIf="site.tarif1WocheRabattDB">
+                <th scope="row">{{ 'row.pricing.1wDiscounted' | l10n }}</th>
+                <td>{{site.tarif1WocheRabattDB}} &euro;</td>
+              </tr>
+              <tr *ngIf="site.tarif1MonatAutomat">
+                <th scope="row">{{ 'row.pricing.1mMachine' | l10n }}</th>
+                <td>{{site.tarif1MonatAutomat}} &euro;</td>
+              </tr>
+              <tr *ngIf="site.tarifSondertarif || site.tarifSondertarif_en">
+                <th scope="row">{{ 'row.pricing.specialPricing' | l10n }}</th>
+                <td>{{getSpecialPricing(site)}} &euro;</td>
+              </tr>
+              <tr *ngIf="site.tarif1MonatDauerparken">
+                <th scope="row">{{ 'row.pricing.1mPermanent' | l10n }}</th>
+                <td>{{site.tarif1MonatDauerparken}} &euro;</td>
+              </tr>
+              <tr *ngIf="site.tarif1MonatDauerparkenFesterStellplatz">
+                <th scope="row">{{ 'row.pricing.1mPermanentFixed' | l10n }}</th>
+                <td>{{site.tarif1MonatDauerparkenFesterStellplatz}} &euro;</td>
+              </tr>
+              <tr>
+                <th scope="row">{{ 'row.pricing.discountBahnComfort' | l10n }}</th>
+                <td>
+                  <span [class]="getBooleanStyle(site.tarifRabattDBIsbahncomfort)">
+                    {{site.tarifRabattDBIsbahncomfort | l10n}}
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">{{ 'row.pricing.discountBahnCard' | l10n }}</th>
+                <td>
+                  <span [class]="getBooleanStyle(site.tarifRabattDBIsBahnCard)">
+                    {{site.tarifRabattDBIsBahnCard | l10n}}
+                  </span>
+                </td>
+              </tr>
+              <!--
+              Undocumented API:
+              <tr>
+                <th scope="row">{{ 'row.pricing.discountParkAndRail' | l10n }}</th>
+                <td>
+                  <span [class]="getBooleanStyle(site.tarifRabattDBIsParkAndRail)">
+                    {{site.tarifRabattDBIsParkAndRail | l10n}}
+                  </span>
+                </td>
+              </tr>
+              -->
+              <tr>
+                <th scope="row">{{ 'row.pricing.sellMonthMachine' | l10n }}</th>
+                <td>
+                  <span [class]="getBooleanStyle(site.tarifMonatIsParkscheinautomat)">
+                    {{site.tarifMonatIsParkscheinautomat | l10n}}
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">{{ 'row.pricing.sellParkAndRideReisezentrum' | l10n }}</th>
+                <td>
+                  <span [class]="getBooleanStyle(site.tarifMonatIsParkAndRide)">
+                    {{site.tarifMonatIsParkAndRide | l10n}}
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">{{ 'row.pricing.sellPermanentParking' | l10n }}</th>
+                <td>
+                  <span [class]="getBooleanStyle(site.tarifMonatIsDauerparken)">
+                    {{site.tarifMonatIsDauerparken | l10n}}
+                  </span>
+                </td>
+              </tr>
+              <tr *ngIf="site.tarifWoVorverkaufDB || site.tarifWoVorverkaufDB_en">
+                <th scope="row">{{ 'row.pricing.preSellingLocation' | l10n }}</th>
+                <td>{{getPreSellingLocation(site)}}</td>
+              </tr>
+              <tr *ngIf="site.tarifWieRabattDB || site.tarifWieRabattDB_en">
+                <th scope="row">{{ 'row.pricing.discountHowTo' | l10n }}</th>
+                <td>{{getDiscountHowTo(site)}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="tab-pane" id="payment" role="tabpanel">
+            <table class="table table-striped">
+              <tbody>
+              <tr *ngIf="site.zahlungKundenkarten.length > 0">
+                <th scope="row">{{ 'row.payment.customer' | l10n }}</th>
+                <td>{{site.zahlungKundenkarten}}</td>
+              </tr>
+              <tr *ngIf="site.zahlungMedien.length > 0 || site.zahlungMedien_en > 0">
+                <th scope="row">{{ 'row.payment.means' | l10n }}</th>
+                <td>{{getPaymentMeans(site)}}</td>
+              </tr>
+              <tr *ngIf="site.zahlungMobil.length > 0">
+                <th scope="row">{{ 'row.payment.mobile' | l10n }}</th>
+                <td>{{site.zahlungMobil}}</td>
+              </tr>
+              </tbody>
+              <tfoot>
+              <tr>
+                <td colspan="2">{{ 'copyright.db' | l10n }}</td>
+              </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+
+        <img class="img-rounded" *ngIf="image" [src]="image">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{'button.close' | l10n}}</button>
+      </div>
+    </div>
+  </div>
+</div>

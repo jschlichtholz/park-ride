@@ -1,0 +1,7 @@
+*
+!src
+!stats
+!angular-cli.json
+!stats/crontab
+!package.json
+!supervisord.conf

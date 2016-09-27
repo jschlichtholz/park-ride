@@ -1,0 +1,21 @@
+$theme-background: #3498db
+$theme-foreground: #fff
+
+.col-md-10
+  padding: 0
+
+.col-md-2
+  overflow-y: scroll
+
+.container-fluid
+  margin-top: 54px
+  margin-bottom: 40px
+
+.container-fluid, .row, .col-md-2, .col-md-10
+  max-height: calc(100vh - 94px)
+  max-height: -moz-calc(100vh - 94px)
+  max-height: -webkit-calc(100vh - 94px)
+
+.bg-themed
+  color: $theme-foreground !important
+  background-color: $theme-background !important

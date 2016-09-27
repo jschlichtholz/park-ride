@@ -1,0 +1,7 @@
+<div *ngFor="let alert of alerts" class="alert alert-{{alert.type}} alert-dismissible fade in" role="alert"
+     [style.top]="getPosition(alert) * 58 + 'px'">
+  <button type="button" class="close" aria-label="Close" (click)="dismiss(alert)">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <strong *ngIf="alert.lead">{{alert.lead | l10n}} </strong> {{alert.msg | l10n}}
+</div>

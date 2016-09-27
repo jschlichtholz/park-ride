@@ -1,6 +1,6 @@
 {
   "project": {
-    "version": "1.0.0-beta.15",
+    "version": "1.0.0",
     "name": "park"
   },
   "apps": [
@@ -15,9 +15,19 @@
       "prefix": "app",
       "mobile": false,
       "styles": [
+        "../node_modules/bootstrap/scss/bootstrap.scss",
+        "../node_modules/openlayers/dist/ol.css",
+        "../node_modules/spinkit/scss/spinkit.scss",
+        "../node_modules/spinkit/scss/spinners/9-cube-grid.scss",
+        "../node_modules/flag-icon-css/sass/_flag-icon.scss",
         "styles.sass"
       ],
-      "scripts": [],
+      "scripts": [
+        "../node_modules/jquery/dist/jquery.js",
+        "../node_modules/tether/dist/js/tether.js",
+        "../node_modules/bootstrap/dist/js/bootstrap.js",
+        "../node_modules/openlayers/dist/ol.js"
+      ],
       "environments": {
         "source": "environments/environment.ts",
         "dev": "environments/environment.ts",
